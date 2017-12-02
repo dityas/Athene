@@ -36,9 +36,5 @@ class TestSymbolTable(unittest.TestCase):
         self.table.add_to_table("foo","bar")
         self.assertIsNone(self.table.get_uuid("bullshit"))
 
-    def test_debug(self):
-        self.table.add_to_table("foo","bar")
-        self.table.debug()
-
 if __name__=="__main__":
     unittest.main()

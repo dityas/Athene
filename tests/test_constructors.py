@@ -23,7 +23,10 @@ class TestConstructors(unittest.TestCase):
         self.assertEqual(all_role.concept.name,"Man")
 
     def test_concept_equality(self):
-        self.assertEqual(Concept("Man"),Concept("Man"))
+        self.assertTrue(Concept("Man")==Concept("Man"))
+
+    def test_concept_inequality(self):
+        self.assertFalse(Concept("Man")==Concept("Woman"))
 
     def test_some_equality(self):
         self.assertEqual(Some("hasParent",Concept("Man")),Some("hasParent",Concept("Woman")))

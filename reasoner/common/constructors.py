@@ -13,12 +13,12 @@ def make_unique_id(name):
         creates a new UUID.
     '''
     _uuid = table.get_uuid(name)
-    if uuid:
+    if _uuid:
         logger.debug(f"{name} found in table.")
         return _uuid
     else:
         logger.debug(f"{name} does not exist. Making new entry.")
-        _uuid=uuid.uuid()
+        _uuid=uuid.uuid1()
         table.add_to_table(name,str(_uuid))
         return _uuid
 
@@ -32,6 +32,9 @@ class Symbol(object):
         self.id=make_unique_id(_string)
 
     def __eq__(self,other):
+        """
+            Overload equality operator to compare UUID instead of hashes.
+        """
         return str(self.id)==other
 
 class Concept(Symbol):
@@ -46,9 +49,6 @@ class Concept(Symbol):
         super().__init__(name)
         self.name=name
         logger.debug(f"Concept {name} initialised")
-
-    def __call__(self,symbol):
-        return self
 
 class Role(Symbol):
     
