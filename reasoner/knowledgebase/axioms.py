@@ -28,6 +28,9 @@ class And(Axiom):
         params_inv=(self.type,self.term_b,self.term_a)
         return (params == other) or (params_inv == other)
 
+    def __hash__(self):
+        return hash(self.type+str(hash(self.term_a))+str(hash(self.term_b)))
+
 class Or(Axiom):
     '''
         Class for writing Or axioms.
@@ -45,6 +48,10 @@ class Or(Axiom):
         params_inv=(self.type,self.term_b,self.term_a)
         return (params == other) or (params_inv == other)
 
+    def __hash__(self):
+        return hash(self.type+str(hash(self.term_a))+str(hash(self.term_b)))
+
+
 class Not(Axiom):
     '''
         Class for defining Not axioms.
@@ -58,3 +65,6 @@ class Not(Axiom):
 
     def __eq__(self,other):
         return (self.type,self.term)==other
+
+    def __hash__(self):
+        return hash(self.type+str(hash(self.term)))

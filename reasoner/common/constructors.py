@@ -37,6 +37,12 @@ class Symbol(object):
         """
         return str(self.id)==other
 
+    def __hash__(self):
+        '''
+            To help hashing axioms for storing in KB.
+        '''
+        return hash(self.id)
+
 class Concept(Symbol):
     '''
         Define concept statements. 
