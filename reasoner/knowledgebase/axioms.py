@@ -31,6 +31,9 @@ class And(Axiom):
     def __hash__(self):
         return hash(self.type+str(hash(self.term_a))+str(hash(self.term_b)))
 
+    def __str__(self):
+        return "("+str(self.term_a)+" AND "+str(self.term_b)+")"
+
 class Or(Axiom):
     '''
         Class for writing Or axioms.
@@ -51,6 +54,8 @@ class Or(Axiom):
     def __hash__(self):
         return hash(self.type+str(hash(self.term_a))+str(hash(self.term_b)))
 
+    def __str__(self):
+        return "("+str(self.term_a)+" OR "+str(self.term_b)+")"
 
 class Not(Axiom):
     '''
@@ -68,3 +73,6 @@ class Not(Axiom):
 
     def __hash__(self):
         return hash(self.type+str(hash(self.term)))
+
+    def __str__(self):
+        return "NOT "+str(self.term)

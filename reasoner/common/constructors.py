@@ -54,7 +54,11 @@ class Concept(Symbol):
     def __init__(self,name):
         super().__init__(name)
         self.name=name
+        self.type="CONCEPT"
         logger.debug(f"Concept {name} initialised")
+
+    def __str__(self):
+        return str(self.name)
 
 class Role(Symbol):
     
@@ -63,6 +67,9 @@ class Role(Symbol):
         self.name=name
         self.concept=concept
 
+    def __str__(self):
+        return self.type+"."+self.name+"."+str(self.concept)
+
 class Some(Role):
     '''
         Defines Role statements.
@@ -70,8 +77,10 @@ class Some(Role):
     
     def __init__(self,name,concept):
         super().__init__(name,concept)
+        self.type="SOME"
 
 class All(Role):
 
     def __init__(self,name,concept):
         super().__init__(name,concept)
+        self.type="ALL"

@@ -5,14 +5,14 @@ import logging
 #logging.basicConfig(level=logging.DEBUG)
 sys.path.append("/home/adityas/Projects/ALC-reasoner/")
 
-from reasoner.knowledgebase.knowledgebase import KnowledgeBase
+from reasoner.knowledgebase.knowledgebase import NodeSet
 from reasoner.knowledgebase.axioms import And,Or,Not
 from reasoner.common.constructors import Concept,Some,All
 
 class TestKB(unittest.TestCase):
 
     def setUp(self):
-        self.KB=KnowledgeBase()
+        self.KB=NodeSet()
         self.axioms=[
             And(Concept("Man"),All("hasChild",Concept("Human"))),
             And(Concept("Woman"),All("hasChild",Concept("Human"))),
@@ -29,7 +29,7 @@ class TestKB(unittest.TestCase):
         self.assertEqual(len(self.KB.axiom_set),len(self.axioms)+1)
 
     def test_contains_axiom(self):
-        self.assertTrue(self.KB.contains(Concept("Robot")))
+        self.assertTrue(self.KB.contains(Concept("Human")))
 
     def test_not_contains_axiom(self):
         self.assertFalse(self.KB.contains(Concept("Dinosaur")))
