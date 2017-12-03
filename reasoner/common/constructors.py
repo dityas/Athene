@@ -84,3 +84,16 @@ class All(Role):
     def __init__(self,name,concept):
         super().__init__(name,concept)
         self.type="ALL"
+
+class Instance(Symbol):
+    '''
+        Defines individuals.
+    '''
+
+    def __init__(self,name):
+        super().__init__(name)
+        self.type="INSTANCE"
+        self.name=name
+
+    def __str__(self):
+        return self.name

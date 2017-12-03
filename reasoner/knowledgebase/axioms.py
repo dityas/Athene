@@ -76,3 +76,23 @@ class Not(Axiom):
 
     def __str__(self):
         return "NOT "+str(self.term)
+
+class Assertion(Axiom):
+    '''
+        Defines Class assertions/ ABox assertions.
+    '''
+
+    def __init__(self,definitions,instance):
+        super().__init__("ASSERT")
+        self.definitions=definitions
+        self.instance=instance
+        logger.debug(f"Initialised axiom ASSERT {self.instance} is a {self.definitions}")
+
+    def __eq__(self,other):
+        return (self.type,self.definitions,self.instance)==other
+
+    def __hash__(self):
+        return hash(self.type+str(hash(self.definitions))+str(hash(self.instance)))
+
+    def __str__(self):
+        return "ASSERT "+str(self.instance)+" IS A "+str(self.definitions)
