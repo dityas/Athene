@@ -4,23 +4,22 @@ logger=logging.getLogger(__name__)
 
 from .axioms import Assertion
 
-class NodeSet(object):
+class NodeSet(set):
     '''
         A set data structure for a node in the completion graph
     '''
 
     def __init__(self,name="Unnamed"):
         self.name=name
-        self.axiom_set=set()
         logger.debug(f"Empty NodeSet {self.name} initialised.")
 
     def add_axiom(self,axiom):
         '''
             Add a single axiom to the Set.
         '''
-        if axiom not in self.axiom_set:
+        if axiom not in self:
             logger.debug(f"Adding {axiom} to the NodeSet {self.name}")
-            self.axiom_set.add(axiom)
+            self.add(axiom)
 
     def add_axioms(self,axiom_list):
         '''
@@ -33,8 +32,8 @@ class NodeSet(object):
         '''
             Remove and return an axiom from the set of all axioms.
         '''
-        if len(self.axiom_set):
-            return self.axiom_set.pop()
+        if len(self):
+            return self.pop()
         else:
             return None
 
@@ -43,7 +42,7 @@ class NodeSet(object):
             Checks if the Set contains the given axiom.
         '''
         logger.debug(f"Looking for {axiom} in {self.name}")
-        return axiom in self.axiom_set
+        return axiom in self
 
 class Box(NodeSet):
     '''
@@ -64,7 +63,7 @@ class Box(NodeSet):
         '''
             returns a generator for getting axioms.
         '''
-        for i,axiom in enumerate(self.axiom_set):
+        for i,axiom in enumerate(self):
             logger.debug(f"{self.name} yielding axiom {axiom}")
             yield axiom
 
@@ -72,7 +71,7 @@ class Box(NodeSet):
         '''
             returns a list of all axioms in the box.
         '''
-        return list(self.axiom_set)
+        return list(self)
 
 class ABox(Box):
     '''
