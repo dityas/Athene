@@ -9,7 +9,7 @@ def NNF(axiom):
     '''
         Recursively converts axioms to NNF.
     '''
-    logger.debug("Converting {axiom} to NNF.")
+    logger.debug(f"Converting {axiom} to NNF.")
 
     if axiom.type=="CONCEPT" or (axiom.type=="NOT" and axiom.term.type=="CONCEPT"):
         return axiom

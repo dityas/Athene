@@ -29,15 +29,12 @@ class Node(object):
     '''
 
     def __init__(self,
-            individual,
-            children={},
-            axioms=NodeSet("axioms"),
-            labels=NodeSet("labels")):
+            individual):
             
         self.name=str(individual)
-        self.axioms=axioms
-        self.labels=labels
-        self.children=children
+        self.axioms=NodeSet("axioms")
+        self.labels=NodeSet("labels")
+        self.children={}
         self.CONSISTENT=True
         logger.debug(f"Node {self.name} initialised.")
 
@@ -71,11 +68,16 @@ class Graph(object):
         Represents a completion graph of nodes.
     '''
 
-    def __init__(self):
-        self.root=None
+    def __init__(self,nodes=None,edges=None):
         self.namer=NodeNameGenerator()
-        self.nodes={}
-        self.edges={}
+        if nodes==None:
+            self.nodes={}
+        else:
+            self.nodes=nodes
+        if edges==None:
+            self.edges={}
+        else:
+            self.edges=edges
         logger.debug(f"Initialised empty graph {self}.")
 
     def make_node(self,node=None,name=None):
@@ -147,8 +149,8 @@ class Graph(object):
             self.nodes[key].set_consistency_marker()
 
     def get_copy(self):
-        return deepcopy(self)
+        return {"nodes":dict(self.nodes),"edges":dict(self.edges)}
 
     def __repr__(self):
-        r=f"---GRAPH---\r\n{self.nodes}\r\n{self.edges}-----------"
+        r=f"---GRAPH---\r\nNODES:{self.nodes}\r\nEDGES:{self.edges}-----------"
         return r

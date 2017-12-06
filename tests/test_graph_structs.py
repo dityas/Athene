@@ -69,29 +69,5 @@ class TestNode(unittest.TestCase):
         self.node.set_consistency_marker()
         self.assertTrue(self.node.CONSISTENT)
 
-class TestReasoning(unittest.TestCase):
-
-    def setUp(self):
-        self.graph=Graph()
-        self.graph.make_node(name="Aditya")
-        self.graph.make_node(name="Icarus")
-        node=self.graph.get_node("Aditya")
-        node.add_concept(Concept("Man"))
-        node.add_concept(Concept("Sleepy"))
-        node.add_concept(Concept("Symbolist"))
-        node=self.graph.get_node("Icarus")
-        node.add_concept(Concept("Man"))
-
-    def test_graph_inconsistency(self):
-        node=self.graph.get_node("Icarus")
-        node.add_concept(Not(Concept("Man")))
-        self.assertFalse(self.graph.is_consistent())
-
-    def test_graph_consistency(self):
-        self.assertTrue(self.graph.is_consistent())
-
-#    def test_graph_printing(self):
-#        print(self.graph)
-
 if __name__=="__main__":
     unittest.main()

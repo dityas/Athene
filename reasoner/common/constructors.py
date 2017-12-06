@@ -43,6 +43,9 @@ class Symbol(object):
         '''
         return hash(self.id)
 
+    def __repr__(self):
+        return self.label
+
 class Concept(Symbol):
     '''
         Define concept statements. 
