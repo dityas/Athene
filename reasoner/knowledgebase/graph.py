@@ -3,6 +3,11 @@ import logging
 logger=logging.getLogger(__name__)
 
 from .knowledgebase import NodeSet
+from .axioms import Not
+from ..common.constructors import Concept
+from ..reasoning.nnf import NNF
+
+from copy import deepcopy
 
 class NodeNameGenerator(object):
     '''
@@ -36,11 +41,30 @@ class Node(object):
         self.CONSISTENT=True
         logger.debug(f"Node {self.name} initialised.")
 
+    def add_concept(self,concept):
+        '''
+            Adds a concept label to the node. label will be checked for a
+            clash before addition.
+        '''
+        if NNF(Not(concept)) in self.labels:
+            logger.info(f"Inconsistency in {self.name} while adding {concept}")
+            self.CONSISTENT=False
+        else:
+            self.labels.add_axiom(concept)
+
+    def set_consistency_marker(self):
+        '''
+            Set consistency flag to True after satisfiability check.
+        '''
+        self.CONSISTENT=True
+        logger.critical(f"Manually setting consistency on {self.name}.")
+
     def __eq__(self,other):
         return self.name==other
 
     def __repr__(self):
-        return self.name
+        a=f"---{self.name}---\r\nLABELS:{self.labels}\r\nCHILDREN:{self.children}\r\nCONSISTENT:{self.CONSISTENT}"
+        return a
 
 class Graph(object):
     '''
@@ -114,3 +138,17 @@ class Graph(object):
             return self.nodes[name]
         else:
             return None
+
+    def is_consistent(self):
+        return len(list(filter(lambda y:y==False,map(lambda x:x[1].CONSISTENT,list(self.nodes.items())))))==0
+
+    def mark_consistent(self):
+        for key in self.nodes.keys():
+            self.nodes[key].set_consistency_marker()
+
+    def get_copy(self):
+        return deepcopy(self)
+
+    def __repr__(self):
+        r=f"---GRAPH---\r\n{self.nodes}\r\n{self.edges}-----------"
+        return r
