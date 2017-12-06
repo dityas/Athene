@@ -136,6 +136,9 @@ class Graph(object):
         return node!=None
 
     def get_node(self,name):
+        '''
+            Returns reference of the node corrosponding to the given name.
+        '''
         if self.contains(name):
             return self.nodes[name]
         else:
@@ -145,10 +148,17 @@ class Graph(object):
         return len(list(filter(lambda y:y==False,map(lambda x:x[1].CONSISTENT,list(self.nodes.items())))))==0
 
     def mark_consistent(self):
+        '''
+            Marks all nodes in the graph as consistent.
+        '''
         for key in self.nodes.keys():
             self.nodes[key].set_consistency_marker()
 
     def get_copy(self):
+        '''
+            Returns a copy of the nodes and edges to help create an identical
+            copy of the graph outside.
+        '''
         return {"nodes":dict(self.nodes),"edges":dict(self.edges)}
 
     def __repr__(self):
