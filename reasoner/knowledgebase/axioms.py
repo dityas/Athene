@@ -77,7 +77,7 @@ class Not(Axiom):
     def __str__(self):
         return "NOT "+str(self.term)
 
-class Assertion(Axiom):
+class ClassAssertion(Axiom):
     '''
         Defines Class assertions/ ABox assertions.
     '''

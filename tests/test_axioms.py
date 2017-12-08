@@ -5,7 +5,7 @@ import logging
 #logging.basicConfig(level=logging.DEBUG)
 sys.path.append("/home/adityas/Projects/ALC-reasoner/")
 
-from reasoner.knowledgebase.axioms import And,Or,Not,Assertion
+from reasoner.knowledgebase.axioms import And,Or,Not,ClassAssertion
 from reasoner.common.constructors import Concept,All,Some,Instance
 
 class TestAxioms(unittest.TestCase):
@@ -59,7 +59,7 @@ class TestAxioms(unittest.TestCase):
     def test_assertion_constructor(self):
         instance=Instance("Aditya")
         _class=Concept("Man")
-        axiom=Assertion(_class,instance)
+        axiom=ClassAssertion(_class,instance)
         self.assertEqual(axiom.definitions,_class)
         self.assertEqual(axiom.instance,instance)
 

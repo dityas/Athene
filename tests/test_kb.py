@@ -6,7 +6,7 @@ import logging
 sys.path.append("/home/adityas/Projects/ALC-reasoner/")
 
 from reasoner.knowledgebase.knowledgebase import NodeSet,KnowledgeBase
-from reasoner.knowledgebase.axioms import And,Or,Not,Assertion
+from reasoner.knowledgebase.axioms import And,Or,Not,ClassAssertion
 from reasoner.common.constructors import Concept,Some,All,Instance
 
 class TestKB(unittest.TestCase):
@@ -14,8 +14,8 @@ class TestKB(unittest.TestCase):
     def setUp(self):
         self.KB=KnowledgeBase()
         self.axioms=[
-            Assertion(And(Concept("Man"),Concept("Human")),Instance("Aditya")),
-            Assertion(Some("owns",Concept("Conputer")),Instance("Aditya"))
+            ClassAssertion(And(Concept("Man"),Concept("Human")),Instance("Aditya")),
+            ClassAssertion(Some("owns",Concept("Conputer")),Instance("Aditya"))
         ]
 
     def test_axiom_insertion(self):

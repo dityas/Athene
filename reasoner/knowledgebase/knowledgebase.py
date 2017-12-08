@@ -2,7 +2,7 @@ import logging
 
 logger=logging.getLogger(__name__)
 
-from .axioms import Assertion
+from .axioms import ClassAssertion
 
 class NodeSet(set):
     '''
@@ -100,7 +100,7 @@ class KnowledgeBase(object):
         logger.debug(f"Knowledge base initialised.")
 
     def __axiom_adder(self,axiom):
-        if type(axiom)==Assertion:
+        if type(axiom)==ClassAssertion:
             self.abox.add_axiom(axiom)
         else:
             self.tbox.add_axiom(axiom)

@@ -6,7 +6,7 @@ import logging
 sys.path.append("/home/adityas/Projects/ALC-reasoner/")
 
 from reasoner.knowledgebase.knowledgebase import NodeSet,KnowledgeBase
-from reasoner.knowledgebase.axioms import And,Or,Not,Assertion
+from reasoner.knowledgebase.axioms import And,Or,Not,ClassAssertion
 from reasoner.common.constructors import Concept,Some,All,Instance
 
 class TestKBStructs(unittest.TestCase):
