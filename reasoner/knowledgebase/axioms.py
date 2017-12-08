@@ -74,7 +74,7 @@ class Not(Axiom):
     def __hash__(self):
         return hash(self.type+str(hash(self.term)))
 
-    def __str__(self):
+    def __repr__(self):
         return "NOT "+str(self.term)
 
 class ClassAssertion(Axiom):

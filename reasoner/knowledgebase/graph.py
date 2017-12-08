@@ -159,8 +159,8 @@ class Graph(object):
             Returns a copy of the nodes and edges to help create an identical
             copy of the graph outside.
         '''
-        return {"nodes":dict(self.nodes),"edges":dict(self.edges)}
+        return {"nodes":deepcopy(self.nodes),"edges":deepcopy(self.edges)}
 
     def __repr__(self):
-        r=f"---GRAPH---\r\nNODES:{self.nodes}\r\nEDGES:{self.edges}-----------"
+        r=f"\r\n---GRAPH---\r\nNODES:{self.nodes}\r\nEDGES:{self.edges}\r\n-----------\r\n"
         return r
