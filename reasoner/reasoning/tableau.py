@@ -24,6 +24,47 @@ def make_model_copies(models_list):
         copy_list.append(Graph(**model.get_copy()))
     return copy_list
 
+def consume_and_axiom(and_axiom,model_struct):
+    '''
+        Adds A,B to the axiom_list for Axiom (A AND B).
+        returns model_struct with axiom_list modified accordingly.
+    '''
+    graph,axioms,known_models,node_name=model_struct
+    axioms.append(and_axiom.term_a)
+    axioms.append(and_axiom.term_b)
+    return (graph,axioms,known_models,node_name)
+
+def consume_or_axiom(or_axiom,model_struct):
+    '''
+        Performs DFS on remaining tree and returns the first satisfiable
+        model_struct.
+    '''
+    graph,axioms,known_models,node_name=model_struct
+#   Create a copy of the axioms list.
+
+    axiomsA=axioms[:]
+    axiomsB=axioms[:]
+    axiomsA.append(or_axiom.term_a)
+    axiomsB.append(or_axiom.term_b)
+
+#   Create a copy of known models.
+    known_copy=make_model_copies(known_models)
+
+#   Make a copy of the state of the graph.
+    graph_copy=deepcopy(graph)
+
+#   Search both sub trees using DFS.
+    struct1=search_model((graph,axiomsA,known_models,node_name))
+    struct2=search_model((graph_copy,axiomsB,known_copy,node_name))
+
+#   Compose the model_struct using the first satisfiable model in the search.
+    if struct1[0].is_consistent():
+        final_struct=(struct1[0],struct1[1],struct1[2]+struct2[2],struct1[3])
+    else:
+        final_struct=(struct2[0],struct2[1],struct1[2]+struct2[2],struct2[3])
+
+    return final_struct
+
 def search_model(model_struct):
     '''
         Performs DFS to search for a satisfiable model given the axiom.
@@ -48,30 +89,15 @@ def search_model(model_struct):
         return (graph,axiom_list,known_models,node_name)
 
     axiom_type=type(element)
+    current_struct=(graph,axiom_list,known_models,node_name)
 
     if axiom_type==Concept or axiom_type==Not:
         graph=add_concept_to_node(graph,element,node_name)
-        return search_model((graph,axiom_list,known_models,node_name))
+        return search_model(current_struct)
 
     elif axiom_type==And:
-        axiom_list.append(element.term_a)
-        axiom_list.append(element.term_b)
-        return search_model((graph,axiom_list,known_models,node_name))
+        struct=consume_and_axiom(element,current_struct)
+        return search_model(struct)
 
     elif axiom_type==Or:
-
-        axiomsA=axiom_list[:]
-        axiomsB=axiom_list[:]
-        axiomsA.append(element.term_a)
-        axiomsB.append(element.term_b)
-        known_copy=make_model_copies(known_models)
-        graph_copy=deepcopy(graph)
-
-        struct1=search_model((graph,axiomsA,known_models,node_name))
-        struct2=search_model((graph_copy,axiomsB,known_copy,node_name))
-        if struct1[0].is_consistent():
-            final_struct=(struct1[0],struct1[1],struct1[2]+struct2[2],struct1[3])
-        else:
-            final_struct=(struct2[0],struct2[1],struct1[2]+struct2[2],struct2[3])
-        #return search_model(final_struct)
-        return final_struct
+        return consume_or_axiom(element,current_struct)
