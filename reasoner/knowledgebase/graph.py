@@ -29,13 +29,22 @@ class Node(object):
     '''
 
     def __init__(self,
-            individual):
-            
-        self.name=str(individual)
-        self.axioms=NodeSet("axioms")
-        self.labels=NodeSet("labels")
-        self.children={}
-        self.CONSISTENT=True
+            individual=None,
+            name=None,
+            labels=None,
+            children=None,
+            consistent=True):
+
+        if individual is not None:
+            self.name=str(individual)
+            self.labels=NodeSet(name="labels")
+            self.children={}
+            self.CONSISTENT=True
+        else:
+            self.name=name
+            self.labels=labels
+            self.children=children
+            self.CONSISTENT=consistent
         logger.debug(f"Node {self.name} initialised.")
 
     def add_concept(self,concept):
@@ -62,6 +71,12 @@ class Node(object):
     def __repr__(self):
         a=f"---{self.name}---\r\nLABELS:{self.labels}\r\nCHILDREN:{self.children}\r\nCONSISTENT:{self.CONSISTENT}"
         return a
+
+    def __deepcopy__(self,memo):
+        return Node(name=self.name,
+                labels=deepcopy(self.labels),
+                children=self.children.copy(),
+                consistent=self.CONSISTENT)
 
 class Graph(object):
     '''
@@ -154,12 +169,13 @@ class Graph(object):
         for key in self.nodes.keys():
             self.nodes[key].set_consistency_marker()
 
-    def get_copy(self):
+    def __deepcopy__(self,memo):
         '''
             Returns a copy of the nodes and edges to help create an identical
             copy of the graph outside.
         '''
-        return {"nodes":deepcopy(self.nodes),"edges":deepcopy(self.edges)}
+        return Graph(nodes=deepcopy(self.nodes),
+                    edges=self.edges.copy())
 
     def __repr__(self):
         r=f"\r\n---GRAPH---\r\nNODES:{self.nodes}\r\nEDGES:{self.edges}\r\n-----------\r\n"

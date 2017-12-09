@@ -17,7 +17,7 @@ class TestTableau(unittest.TestCase):
     def setUp(self):
         self.graph=Graph()
         self.and_axiom=And(And(Concept("Man"),Concept("Student")),Not(Concept("Robot")))
-    """
+
     def test_termination(self):
         struct=search_model((self.graph,[Concept("Man")],[],"Aditya"))
         self.assertEqual(len(struct[2]),1)
@@ -37,7 +37,6 @@ class TestTableau(unittest.TestCase):
     def test_complex_or_handling(self):
         struct=search_model((self.graph,[complex_or],[],"Aditya"))
         self.assertEqual(len(struct[2]),3)
-    """
 
     def test_complicated_axiom(self):
         struct=search_model((self.graph,[kinda_complicated_axiom],[],"Aditya"))

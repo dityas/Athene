@@ -6,6 +6,8 @@ from ..knowledgebase.axioms import And,Or,Not
 from ..knowledgebase.graph import Graph
 from ..common.constructors import Concept
 
+from copy import deepcopy
+
 def add_concept_to_node(graph,concept,node_name):
     '''
         Adds concept to node_name. If a node labelled node_name does not
@@ -32,17 +34,17 @@ def search_model(model_struct):
     axiom_list=model_struct[1]
     known_models=model_struct[2]
     node_name=model_struct[3]
-    print(f"Axioms to process {axiom_list}")
+    logger.debug(f"Axioms to process {axiom_list}")
 
     if len(axiom_list):
         element=axiom_list.pop()
-        print(f"Consuming axiom: {element}")
+        logger.debug(f"Consuming axiom: {element}")
     else:
         if graph.is_consistent():
-            print(f"Graph {graph} is consistent.")
+            logger.debug(f"Graph {graph} is consistent.")
             known_models.append(graph)
         else:
-            print(f"Graph {graph} is inconsistent.")
+            logger.debug(f"Graph {graph} is inconsistent.")
         return (graph,axiom_list,known_models,node_name)
 
     axiom_type=type(element)
@@ -63,10 +65,9 @@ def search_model(model_struct):
         axiomsA.append(element.term_a)
         axiomsB.append(element.term_b)
         known_copy=make_model_copies(known_models)
-        graph_copy=Graph(**graph.get_copy())
+        graph_copy=deepcopy(graph)
 
         struct1=search_model((graph,axiomsA,known_models,node_name))
-        print(f"Starting again with {graph_copy}")
         struct2=search_model((graph_copy,axiomsB,known_copy,node_name))
         if struct1[0].is_consistent():
             final_struct=(struct1[0],struct1[1],struct1[2]+struct2[2],struct1[3])

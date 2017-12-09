@@ -4,12 +4,16 @@ logger=logging.getLogger(__name__)
 
 from .axioms import ClassAssertion
 
+from copy import deepcopy
+
 class NodeSet(set):
     '''
         A set data structure for a node in the completion graph
     '''
 
-    def __init__(self,name="Unnamed"):
+    def __init__(self,obj=None,name="Unnamed"):
+        if obj:
+            super().__init__(obj)
         self.name=name
         logger.debug(f"Empty NodeSet {self.name} initialised.")
 
@@ -43,6 +47,9 @@ class NodeSet(set):
         '''
         logger.debug(f"Looking for {axiom} in {self.name}")
         return axiom in self
+
+    def __deepcopy__(self,memo):
+        return NodeSet(deepcopy(set(self)))
 
 class Box(NodeSet):
     '''

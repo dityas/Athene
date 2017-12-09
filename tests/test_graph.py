@@ -37,8 +37,7 @@ class TestReasoning(unittest.TestCase):
     def test_graph_printing(self):
         self.graph.make_edge("is","Aditya","Icarus")
         print(self.graph)
-        another=self.graph.get_copy()
-        another_graph=Graph(**another)
+        another_graph=deepcopy(self.graph)
         node=another_graph.get_node("Terminator")
         node.add_concept(Concept("Machine"))
         print(another_graph)
