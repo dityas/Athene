@@ -6,6 +6,8 @@ from .graph import Graph
 from ..reasoning.nnf import NNF
 from ..reasoning.tableau import search_model
 
+from copy import deepcopy
+
 class Model(object):
     '''
         Represents a set of satisfiable models for the given axioms.
@@ -45,6 +47,18 @@ class Model(object):
     def is_consistent(self):
         sat_models=self._get_satisfiable_models()
         return len(sat_models)!=0
+
+    def is_satisfiable(self,axiom):
+        '''
+            Returns True is models satisfy the given axiom without actually
+            adding the axiom.
+        '''
+        graph,axioms,models,node=self.model_struct
+        backup=(deepcopy(graph),axioms[:],models[:],node)
+        self.add_axiom(axiom)
+        satisfiability=self.is_consistent()
+        self.model_struct=backup
+        return satisfiability
 
     def add_axiom(self,axiom):
         if axiom.type=="ABOX":
