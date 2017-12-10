@@ -29,14 +29,13 @@ class Node(object):
     '''
 
     def __init__(self,
-            individual=None,
             name=None,
             labels=None,
             children=None,
             consistent=True):
 
-        if individual is not None:
-            self.name=str(individual)
+        if labels == None:
+            self.name=name
             self.labels=NodeSet(name="labels")
             self.children={}
             self.CONSISTENT=True
@@ -107,7 +106,7 @@ class Graph(object):
         else:
             if name==None:
                 name=self.namer.get_name()
-            self.nodes[name]=Node(individual=name)
+            self.nodes[name]=Node(name=name)
         logger.debug(f"made new node {name} in {self}")
         return name
 

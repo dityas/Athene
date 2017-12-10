@@ -13,6 +13,7 @@ def add_concept_to_node(graph,concept,node_name):
         Adds concept to node_name. If a node labelled node_name does not
         exist, it will be created.
     '''
+    print(graph.contains(node_name))
     if not graph.contains(node_name):
         graph.make_node(name=node_name)
     graph.get_node(node_name).add_concept(concept)

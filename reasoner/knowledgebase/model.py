@@ -63,4 +63,4 @@ class Model(object):
     def add_axiom(self,axiom):
         if axiom.type=="ABOX":
             axiom=axiom.axiom
-            self.__consume_abox_axiom(axiom.definitions,axiom.instance)
+            self.__consume_abox_axiom(axiom.definitions,axiom.instance.name)
