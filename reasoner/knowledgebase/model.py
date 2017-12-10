@@ -54,7 +54,7 @@ class Model(object):
             adding the axiom.
         '''
         graph,axioms,models,node=self.model_struct
-        backup=(deepcopy(graph),axioms[:],models[:],node)
+        backup=(deepcopy(graph),axioms[:],deepcopy(models),node)
         self.add_axiom(axiom)
         satisfiability=self.is_consistent()
         self.model_struct=backup
