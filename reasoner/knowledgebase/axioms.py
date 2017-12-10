@@ -83,7 +83,7 @@ class ClassAssertion(Axiom):
     '''
 
     def __init__(self,definitions,instance):
-        super().__init__("ASSERT")
+        super().__init__("C_ASSERT")
         self.definitions=definitions
         self.instance=instance
         logger.debug(f"Initialised axiom ASSERT {self.instance} is a {self.definitions}")
