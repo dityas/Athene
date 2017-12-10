@@ -50,6 +50,7 @@ class Model(object):
         if _type=="ABOX":
             axiom,node=self.axiom_split_methods[axiom.axiom.type](axiom.axiom)
 
+        axiom=self.__get_nnf(axiom)
         return len(self._get_sat_models(axiom,node))!=0
 
     def add_axiom(self,axiom):
