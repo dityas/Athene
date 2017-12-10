@@ -16,3 +16,5 @@ kinda_complicated_unsat_axiom=And(Or(And(Concept("Man"),Not(Concept("Machine")))
 kinda_complicated_unsat_abox=ABoxAxiom(ClassAssertion(kinda_complicated_unsat_axiom,Instance("Aditya")))
 
 simple_and_abox=ABoxAxiom(ClassAssertion(And(Concept("Man"),Concept("Machine")),Instance("Aditya")))
+
+simple_or_abox=ABoxAxiom(ClassAssertion(simple_or,Instance("Aditya")))

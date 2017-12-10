@@ -20,12 +20,16 @@ class TestModel(unittest.TestCase):
     def test_model_inconsistency_check(self):
         self.model.add_axiom(kinda_complicated_unsat_abox)
         self.assertFalse(self.model.is_consistent())
-    """
+
     def test_model_sat_check_when_sat(self):
         self.model.add_axiom(kinda_complicated_abox)
-        print(self.model.model_struct)
-        print(self.model.is_satisfiable(simple_and_abox))
-        print(self.model.model_struct)
-    """
+        self.assertTrue(self.model.is_consistent())
+        self.assertTrue(self.model.is_satisfiable(simple_or_abox))
+
+    def test_model_sat_check_when_unsat(self):
+        self.model.add_axiom(kinda_complicated_abox)
+        self.assertTrue(self.model.is_consistent())
+        self.assertFalse(self.model.is_satisfiable(simple_and_abox))
+
 if __name__=="__main__":
     unittest.main()
