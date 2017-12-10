@@ -55,7 +55,7 @@ class Node(object):
         if NNF(Not(concept)) in self.labels:
             logger.info(f"Inconsistency in {self.name} while adding {concept}")
             self.CONSISTENT=False
-        else:
+        if NNF(concept) not in self.labels:
             self.labels.add_axiom(concept)
 
     def set_consistency_marker(self):

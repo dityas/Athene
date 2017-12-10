@@ -19,7 +19,6 @@ class TestModel(unittest.TestCase):
         
     def test_model_inconsistency_check(self):
         self.model.add_axiom(kinda_complicated_unsat_abox)
-#        print(self.model.model_struct)
         self.assertFalse(self.model.is_consistent())
 
 if __name__=="__main__":
