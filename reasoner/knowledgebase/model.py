@@ -28,6 +28,10 @@ class Model(object):
         pass #TODO
 
     def _get_sat_models(self,axiom,individual=None):
+        '''
+            Runs tableau on a copy of currently satisfiable models and
+            returns satisfiable ones.
+        '''
         models=[]
         for model in self.models:
             struct=search_model((deepcopy(model),[axiom],[],individual))
@@ -35,9 +39,15 @@ class Model(object):
         return models
 
     def __process_graph(self,axiom,node=None):
+        '''
+            Commits changes in satisfiable graphs.
+        '''
         self.models=self._get_sat_models(axiom,node)
 
     def __consume_abox_axiom(self,axiom):
+        '''
+            Permanently adds ABOX axiom to the graph.
+        '''
         logger.debug(f"Applying {axiom}")
         axiom,node=self.axiom_split_methods[axiom.type](axiom)
         self.__process_graph(self.__get_nnf(axiom),node)
@@ -46,6 +56,10 @@ class Model(object):
         return len(self.models)!=0
 
     def is_satisfiable(self,axiom):
+        '''
+            Checks if given axiom is satisfiale for the currently satisfiable
+            models. Any changes made during inference are discarded.
+        '''
         _type=axiom.type
         if _type=="ABOX":
             axiom,node=self.axiom_split_methods[axiom.axiom.type](axiom.axiom)
@@ -54,6 +68,9 @@ class Model(object):
         return len(self._get_sat_models(axiom,node))!=0
 
     def add_axiom(self,axiom):
+        '''
+            Permanently adds given axiom to the graph.
+        '''
         if axiom.type=="ABOX":
             axiom=axiom.axiom
             self.__consume_abox_axiom(axiom)
