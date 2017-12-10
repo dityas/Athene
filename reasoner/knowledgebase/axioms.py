@@ -96,3 +96,21 @@ class ClassAssertion(Axiom):
 
     def __str__(self):
         return "ASSERT "+str(self.instance)+" IS A "+str(self.definitions)
+
+class ABoxAxiom(Axiom):
+    '''
+        Provides a wrapper around assertion axioms.
+    '''
+    
+    def __init__(self,axiom):
+        super().__init__("ABOX")
+        self.axiom=axiom
+
+    def __eq__(self,other):
+        return self.axiom==other
+
+    def __hash__(self):
+        return hash(self.type+str(hash(self.axiom)))
+
+    def __str__(self):
+        return str(self.axiom)

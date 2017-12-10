@@ -47,5 +47,6 @@ class Model(object):
         return len(sat_models)!=0
 
     def add_axiom(self,axiom):
-        if axiom.type=="ASSERT":
+        if axiom.type=="ABOX":
+            axiom=axiom.axiom
             self.__consume_abox_axiom(axiom.definitions,axiom.instance)
