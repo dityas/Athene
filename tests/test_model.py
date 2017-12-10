@@ -12,7 +12,7 @@ class TestModel(unittest.TestCase):
 
     def setUp(self):
         self.model=Model()
-    """
+
     def test_model_consistency_check(self):
         self.model.add_axiom(kinda_complicated_abox)
         self.assertTrue(self.model.is_consistent())
@@ -26,6 +26,6 @@ class TestModel(unittest.TestCase):
         print(self.model.model_struct)
         print(self.model.is_satisfiable(simple_and_abox))
         print(self.model.model_struct)
-
+    """
 if __name__=="__main__":
     unittest.main()
