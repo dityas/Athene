@@ -85,7 +85,7 @@ class ABox(Box):
         Defines ABox.
     '''
     def __init__(self):
-        super().__init__("abox")
+        super().__init__(name="abox")
 
 
 class TBox(Box):
@@ -93,7 +93,7 @@ class TBox(Box):
         Defines TBox.
     '''
     def __init__(self):
-        super().__init__("tbox")
+        super().__init__(name="tbox")
 
 
 class KnowledgeBase(object):
@@ -121,29 +121,3 @@ class KnowledgeBase(object):
             returns whether the KB contains the given axiom.
         '''
         return self.abox.contains(axiom) or self.tbox.contains(axiom)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
