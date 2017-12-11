@@ -2,7 +2,7 @@ import logging
 
 logger=logging.getLogger(__name__)
 
-from .axioms import ClassAssertion
+from .model import Model
 
 from copy import deepcopy
 
@@ -104,17 +104,47 @@ class KnowledgeBase(object):
     def __init__(self):
         self.abox=ABox()
         self.tbox=TBox()
+        self.model=Model()
         logger.debug(f"Knowledge base initialised.")
 
     def __axiom_adder(self,axiom):
-        if type(axiom)==ClassAssertion:
+        '''
+            Adds axiom to appropriate box.
+        '''
+        if axiom.type=="ABOX":
             self.abox.add_axiom(axiom)
         else:
             self.tbox.add_axiom(axiom)
 
+    def init_axioms_list(self):
+        '''
+            Initialises self.axioms as a list of all axioms in the KB.
+        '''
+        self.axioms=self.tbox.get_axioms+self.abox.get_axioms
+
     def add_axioms(self,axiom_list):
         for axiom in axiom_list:
             self.__axiom_adder(axiom)
+
+    def load_from_list(self,axioms):
+        '''
+            Loads axioms into KB from python lists.
+        '''
+        self.add_axioms(axioms)
+
+    def run_model(self):
+        '''
+            Create a model for the current axioms in the KB.
+        '''
+        self.init_axioms_list()
+        for axiom in self.axioms:
+            model.add_axiom(axiom)
+
+    def is_consistent(self):
+        return self.model.is_consistent()
+
+    def is_satisfiable(self,axiom):
+        return self.model.is_satisfiable(axiom)
 
     def contains(self,axiom):
         '''
