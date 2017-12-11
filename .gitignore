@@ -1,4 +1,3 @@
 __pycache__/
 *.pyc
 *.swp
-tests/sample_axioms.py
