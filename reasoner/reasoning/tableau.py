@@ -2,7 +2,7 @@ import logging
 
 logger=logging.getLogger(__name__)
 
-from ..knowledgebase.axioms import And,Or,Not
+from ..knowledgebase.axioms import And,Or,Not,RoleAssertion
 from ..knowledgebase.graph import Graph
 from ..common.constructors import Concept,Some,All
 
@@ -100,6 +100,17 @@ def consume_role_axiom(axiom,struct):
         graph=insert_for_all(graph,axiom.name,axiom.concept,node)
         return (graph,axioms,models,node)
 
+def consume_role_assertion(axiom,struct):
+    '''
+        Tableau rules for role assertions - R(a,b).
+    '''
+    graph,axioms,models,node=struct
+    if not graph.contains(node[0]):
+        graph.make_node(name=node[0])
+    if not graph.contains(node[1]):
+        graph.make_node(name=node[1])
+    graph.make_edge(axiom.role,node[0],node[1])
+    return (graph,axioms,models,node)
 
 def search_model(model_struct):
     '''
@@ -130,6 +141,10 @@ def search_model(model_struct):
     if axiom_type==Concept or axiom_type==Not:
         graph=add_concept_to_node(graph,element,node_name)
         return search_model(current_struct)
+
+    elif axiom_type==RoleAssertion:
+        struct=consume_role_assertion(element,current_struct)
+        return search_model(struct)
 
     elif axiom_type==Some:
         struct=consume_role_axiom(element,current_struct)

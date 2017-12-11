@@ -135,3 +135,6 @@ class ABoxAxiom(Axiom):
 
     def __str__(self):
         return str(self.axiom)
+
+    def __repr__(self):
+        return str(self.axiom)
