@@ -5,7 +5,7 @@ import logging
 #logging.basicConfig(level=logging.DEBUG)
 sys.path.append("/home/adityas/Projects/ALC-reasoner/")
 
-from reasoner.knowledgebase.axioms import And,Or,Not,ClassAssertion
+from reasoner.knowledgebase.axioms import And,Or,Not,ClassAssertion,RoleAssertion
 from reasoner.common.constructors import Concept,All,Some,Instance
 
 class TestAxioms(unittest.TestCase):
@@ -62,6 +62,14 @@ class TestAxioms(unittest.TestCase):
         axiom=ClassAssertion(_class,instance)
         self.assertEqual(axiom.definitions,_class)
         self.assertEqual(axiom.instance,instance)
+
+    def test_role_assertion(self):
+        instance1=Instance("Aditya")
+        instance2=Instance("Icarus")
+        axiom=RoleAssertion("hasComputer",instance1,instance2)
+        self.assertEqual(axiom.role,"hasComputer")
+        self.assertEqual(axiom.instance1,instance1)
+        self.assertEqual(axiom.instance2,instance2)
 
 if __name__=="__main__":
     unittest.main()
