@@ -138,3 +138,24 @@ class ABoxAxiom(Axiom):
 
     def __repr__(self):
         return str(self.axiom)
+
+class TBoxAxiom(Axiom):
+    '''
+        A Wrapper for TBox axioms.
+    '''
+
+    def __init__(self,axiom):
+        super().__init__("TBOX")
+        self.axiom=axiom
+
+    def __eq__(self,other):
+        return self.axiom==other
+
+    def __hash__(self):
+        return hash(self.type+str(hash(self.axiom)))
+
+    def __str__(self):
+        return str(self.axiom)
+
+    def __repr__(self):
+        return str(self.axiom)
