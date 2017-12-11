@@ -25,7 +25,7 @@ class Model(object):
         return axiom.definitions,axiom.instance.name
 
     def __split_role_assert(self,axiom):
-        pass #TODO
+        return axiom,(axiom.instance1.name,axiom.instance2.name)
 
     def _get_sat_models(self,axiom,individual=None):
         '''

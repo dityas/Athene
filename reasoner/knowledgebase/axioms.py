@@ -97,6 +97,27 @@ class ClassAssertion(Axiom):
     def __str__(self):
         return "ASSERT "+str(self.instance)+" IS A "+str(self.definitions)
 
+class RoleAssertion(Axiom):
+    '''
+        Defines Role assertions/ ABox assertions.
+    '''
+
+    def __init__(self,role,instance1,instance2):
+        super().__init__("R_ASSERT")
+        self.role=role
+        self.instance1=instance1
+        self.instance2=instance2
+        logger.debug(f"Initialised axiom ASSERT {self.instance1} {self.role} {self.instance2}")
+
+    def __eq__(self,other):
+        return (self.type,self.role,self.instance1,self.instance2)==other
+
+    def __hash__(self):
+        return hash(self.type+str(hash(self.role))+str(hash(self.instance1))+str(hash(self.instance2)))
+
+    def __str__(self):
+        return f"ASSERT {self.instance1} {self.role} {self.instance2}"
+
 class ABoxAxiom(Axiom):
     '''
         Provides a wrapper around assertion axioms.
@@ -113,4 +134,7 @@ class ABoxAxiom(Axiom):
         return hash(self.type+str(hash(self.axiom)))
 
     def __str__(self):
+        return str(self.axiom)
+
+    def __repr__(self):
         return str(self.axiom)

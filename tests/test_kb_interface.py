@@ -15,7 +15,7 @@ class TestKBInterface(unittest.TestCase):
 
     def test_axiom_insertion(self):
         self.KB.load_from_list(consistent_complex_abox)
-        self.assertTrue(self.KB.contains(consistent_complex_abox[2]))
+        self.assertTrue(self.KB.contains(consistent_complex_abox[1]))
 
     def test_consistency_when_consistent(self):
         self.KB.load_from_list(consistent_complex_abox)
@@ -30,7 +30,10 @@ class TestKBInterface(unittest.TestCase):
         self.assertTrue(self.KB.is_consistent())
         self.assertFalse(self.KB.is_satisfiable(kinda_complicated_unsat_abox))
         self.assertTrue(self.KB.is_consistent())
-        
+
+    def test_consistent_abox(self):
+        self.KB.load_from_list(consistent_abox)
+        self.assertTrue(self.KB.is_consistent())
 
 if __name__=="__main__":
     unittest.main()

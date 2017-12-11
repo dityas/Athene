@@ -11,7 +11,7 @@ def NNF(axiom):
     '''
     logger.debug(f"Converting {axiom} to NNF.")
 
-    if axiom.type=="CONCEPT" or (axiom.type=="NOT" and axiom.term.type=="CONCEPT"):
+    if axiom.type=="CONCEPT" or (axiom.type=="NOT" and axiom.term.type=="CONCEPT") or axiom.type=="R_ASSERT":
         return axiom
 
     elif axiom.type=="NOT" and axiom.term.type=="NOT":

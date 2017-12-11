@@ -109,6 +109,9 @@ class Node(object):
         self.CONSISTENT=True
         logger.critical(f"Manually setting consistency on {self.name}.")
 
+    def contains(self,axiom):
+        return self.labels.contains(axiom)
+
     def __eq__(self,other):
         return self.name==other
 
@@ -188,7 +191,13 @@ class Graph(object):
             returns a list of connected nodes to a parent node along the
             given edge.
         '''
-        return list(map(lambda x:self.nodes[x],list(self.nodes[parent].children.setdefault(edge_name))))
+        node=self.get_node(name=parent)
+        children=node.children.setdefault(edge_name)
+        if children==None:
+            return []
+        else:
+            return list(map(lambda x:self.get_node(name=x),list(children)))
+
 
     def contains(self,name):
         node=self.nodes.setdefault(name)

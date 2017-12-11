@@ -2,9 +2,9 @@ import logging
 
 logger=logging.getLogger(__name__)
 
-from ..knowledgebase.axioms import And,Or,Not
+from ..knowledgebase.axioms import And,Or,Not,RoleAssertion
 from ..knowledgebase.graph import Graph
-from ..common.constructors import Concept
+from ..common.constructors import Concept,Some,All
 
 from copy import deepcopy
 
@@ -65,6 +65,53 @@ def consume_or_axiom(or_axiom,model_struct):
 
     return final_struct
 
+def insert_for_some(graph,role,concept,node):
+    children=graph.get_connected_children(node,role)
+    for child in children:
+        if child.contains(concept):
+            return graph
+    new_node=graph.make_node()
+    graph.make_edge(role,node,new_node)
+    node=graph.get_node(name=new_node)
+    node.add_concept(concept)
+    return graph
+
+def insert_for_all(graph,role,concept,node):
+    children=graph.get_connected_children(node,role)
+    for child in children:
+        child.add_concept(concept)
+
+    return graph
+
+
+def consume_role_axiom(axiom,struct):
+    '''
+        Tableau rules for SOME and ALL assertions.
+    '''
+    graph,axioms,models,node=struct
+    if not graph.contains(node):
+        graph.make_node(name=node)
+
+    if axiom.type=="SOME":
+        graph=insert_for_some(graph,axiom.name,axiom.concept,node)
+        return (graph,axioms,models,node)
+
+    elif axiom.type=="ALL":
+        graph=insert_for_all(graph,axiom.name,axiom.concept,node)
+        return (graph,axioms,models,node)
+
+def consume_role_assertion(axiom,struct):
+    '''
+        Tableau rules for role assertions - R(a,b).
+    '''
+    graph,axioms,models,node=struct
+    if not graph.contains(node[0]):
+        graph.make_node(name=node[0])
+    if not graph.contains(node[1]):
+        graph.make_node(name=node[1])
+    graph.make_edge(axiom.role,node[0],node[1])
+    return (graph,axioms,models,node)
+
 def search_model(model_struct):
     '''
         Performs DFS to search for a satisfiable model given the axiom.
@@ -94,6 +141,18 @@ def search_model(model_struct):
     if axiom_type==Concept or axiom_type==Not:
         graph=add_concept_to_node(graph,element,node_name)
         return search_model(current_struct)
+
+    elif axiom_type==RoleAssertion:
+        struct=consume_role_assertion(element,current_struct)
+        return search_model(struct)
+
+    elif axiom_type==Some:
+        struct=consume_role_axiom(element,current_struct)
+        return search_model(struct)
+
+    elif axiom_type==All:
+        struct=consume_role_axiom(element,current_struct)
+        return search_model(struct)
 
     elif axiom_type==And:
         struct=consume_and_axiom(element,current_struct)
