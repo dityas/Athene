@@ -27,3 +27,9 @@ inconsistent_complex_abox=[
 ABoxAxiom(ClassAssertion(Or(And(Concept("Man"),Not(Concept("Machine"))),And(Concept("Machine"),Not(Concept("Man")))),Instance("Aditya"))),
 ABoxAxiom(ClassAssertion(And(Concept("Man"),Not(Concept("Man"))),Instance("Arnold")))]
 
+consistent_abox=[
+ABoxAxiom(ClassAssertion(Concept("Man"),Instance("Aditya"))),
+ABoxAxiom(ClassAssertion(And(Concept("Machine"),Not(Concept("Man"))),Instance("HAL"))),
+ABoxAxiom(ClassAssertion(Some("hasComputer",Concept("Ada")),Instance("Aditya"))),
+ABoxAxiom(ClassAssertion(All("hasComputer",Not(Concept("Man"))),Instance("Aditya")))
+]

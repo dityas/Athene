@@ -30,7 +30,10 @@ class TestKBInterface(unittest.TestCase):
         self.assertTrue(self.KB.is_consistent())
         self.assertFalse(self.KB.is_satisfiable(kinda_complicated_unsat_abox))
         self.assertTrue(self.KB.is_consistent())
-        
+
+    def test_consistent_abox(self):
+        self.KB.load_from_list(consistent_abox)
+        self.assertTrue(self.KB.is_consistent())
 
 if __name__=="__main__":
     unittest.main()
