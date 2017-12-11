@@ -5,7 +5,7 @@ import logging
 #logging.basicConfig(level=logging.DEBUG)
 sys.path.append("/home/adityas/Projects/ALC-reasoner/")
 
-from reasoner.knowledgebase.axioms import And,Or,Not,ClassAssertion,RoleAssertion,TBoxAxiom
+from reasoner.knowledgebase.axioms import And,Or,Not,ClassAssertion,RoleAssertion,TBoxAxiom,Subsumption
 from reasoner.common.constructors import Concept,All,Some,Instance
 
 class TestAxioms(unittest.TestCase):
@@ -75,6 +75,13 @@ class TestAxioms(unittest.TestCase):
         axiom=And(Concept("Man"),Concept("Machine"))
         wrapper=TBoxAxiom(axiom)
         self.assertEqual(axiom,wrapper.axiom)
+
+    def test_subsumption_axiom(self):
+        axiom1=Concept("Man")
+        axiom2=Concept("Human")
+        axiom=Subsumption(axiom1,axiom2)
+        self.assertEqual(axiom1,axiom.axiom1)
+        self.assertEqual(axiom2,axiom.axiom2)
 
 if __name__=="__main__":
     unittest.main()

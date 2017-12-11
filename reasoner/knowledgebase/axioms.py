@@ -77,6 +77,25 @@ class Not(Axiom):
     def __repr__(self):
         return "NOT "+str(self.term)
 
+class Subsumption(Axiom):
+    '''
+        Class for defining subsumptions.
+    '''
+
+    def __init__(self,axiom1,axiom2):
+        super().__init__("SUBSUMPTION")
+        self.axiom1=axiom1
+        self.axiom2=axiom2
+
+    def __eq__(self,other):
+        return (self.type,self.axiom)==other
+
+    def __hash__(self):
+        return hash(self.type+str(hash(self.axiom)))
+
+    def __repr__(self):
+        return f"ALL {self.axiom1} ARE {self.axiom2}"
+
 class ClassAssertion(Axiom):
     '''
         Defines Class assertions/ ABox assertions.
