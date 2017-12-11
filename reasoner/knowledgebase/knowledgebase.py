@@ -76,7 +76,7 @@ class KnowledgeBase(object):
         '''
             Initialises self.axioms as a list of all axioms in the KB.
         '''
-        self.axioms=self.tbox.get_axioms+self.abox.get_axioms
+        self.axioms=self.tbox.get_axioms()+self.abox.get_axioms()
 
     def add_axioms(self,axiom_list):
         for axiom in axiom_list:
@@ -87,6 +87,7 @@ class KnowledgeBase(object):
             Loads axioms into KB from python lists.
         '''
         self.add_axioms(axioms)
+        self.run_model()
 
     def run_model(self):
         '''
@@ -94,7 +95,7 @@ class KnowledgeBase(object):
         '''
         self.init_axioms_list()
         for axiom in self.axioms:
-            model.add_axiom(axiom)
+            self.model.add_axiom(axiom)
 
     def is_consistent(self):
         return self.model.is_consistent()
