@@ -6,7 +6,7 @@ import logging
 sys.path.append("/home/adityas/Projects/ALC-reasoner/")
 
 from reasoner.knowledgebase.knowledgebase import NodeSet
-from reasoner.knowledgebase.axioms import And,Or,Not
+from reasoner.knowledgebase.axioms import And,Or,Not,Subsumption
 from reasoner.common.constructors import Concept,Some,All
 from reasoner.reasoning.nnf import NNF
 
@@ -70,6 +70,12 @@ class TestNNF(unittest.TestCase):
         axiom1=Not(And(Some("A",Concept("B")),Not(Concept("C"))))
         axiom2=Or(All("A",Not(Concept("B"))),Concept("C"))
         self.assertEqual(axiom2,NNF(axiom1))
+
+    def test_nnf_subsumption(self):
+        axiom1=Concept("Man")
+        axiom2=Concept("Human")
+        axiom=Subsumption(axiom1,axiom2)
+        self.assertEqual(NNF(axiom),Or(Not(Concept("Man")),Concept("Human")))
 
 if __name__=="__main__":
     unittest.main()
