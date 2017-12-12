@@ -3,7 +3,6 @@ import logging
 logger=logging.getLogger(__name__)
 
 from .graph import NodeSet
-from .model import Model
 
 from copy import deepcopy
 
@@ -60,7 +59,6 @@ class KnowledgeBase(object):
     def __init__(self):
         self.abox=ABox()
         self.tbox=TBox()
-        self.model=Model()
         logger.debug(f"Knowledge base initialised.")
 
     def __axiom_adder(self,axiom):
@@ -87,21 +85,6 @@ class KnowledgeBase(object):
             Loads axioms into KB from python lists.
         '''
         self.add_axioms(axioms)
-        self.run_model()
-
-    def run_model(self):
-        '''
-            Create a model for the current axioms in the KB.
-        '''
-        self.init_axioms_list()
-        for axiom in self.axioms:
-            self.model.add_axiom(axiom)
-
-    def is_consistent(self):
-        return self.model.is_consistent()
-
-    def is_satisfiable(self,axiom):
-        return self.model.is_satisfiable(axiom)
 
     def contains(self,axiom):
         '''
