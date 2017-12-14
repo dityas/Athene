@@ -63,6 +63,9 @@ class Concept(Symbol):
     def __str__(self):
         return str(self.name)
 
+    def __hash__(self):
+        return hash(str(self.id))
+
 class Role(Symbol):
     
     def __init__(self,name,concept):

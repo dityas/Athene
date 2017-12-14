@@ -14,7 +14,7 @@ class Model(object):
     '''
 
     def __init__(self):
-        self.models=[Graph()]
+        self.models=[{}]
         self.axiom_split_methods={"C_ASSERT":self.__split_class_assert,
                                 "R_ASSERT":self.__split_role_assert}
 
@@ -34,7 +34,7 @@ class Model(object):
         '''
         models=[]
         for model in self.models:
-            struct=search_model((deepcopy(model),[axiom],[],individual))
+            # TODO: model=run_tableau(axiom,model)
             models+=struct[2]
         return models
 
