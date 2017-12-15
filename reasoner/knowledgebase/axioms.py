@@ -11,6 +11,9 @@ class Axiom(object):
     def __init__(self,_type):
         self.type=_type
 
+    def __eq__(self,other):
+        return hash(self)==hash(other)
+
 class And(Axiom):
     '''
         Class for writing And axioms. 
@@ -23,16 +26,14 @@ class And(Axiom):
         self.term_b=term_b
         logger.debug(f"Initialised axiom And({self.term_a},{self.term_b})")
 
-    def __eq__(self,other):
-        params=(self.type,self.term_a,self.term_b)
-        params_inv=(self.type,self.term_b,self.term_a)
-        return (params == other) or (params_inv == other)
-
     def __hash__(self):
         return hash(self.type+str(hash(self.term_a))+str(hash(self.term_b)))
 
     def __str__(self):
         return "("+str(self.term_a)+" AND "+str(self.term_b)+")"
+
+    def __repr__(self):
+        return str(self)
 
 class Or(Axiom):
     '''
@@ -46,16 +47,14 @@ class Or(Axiom):
         self.term_b=term_b
         logger.debug(f"Initialised axiom Or({self.term_a},{self.term_b})")
 
-    def __eq__(self,other):
-        params=(self.type,self.term_a,self.term_b)
-        params_inv=(self.type,self.term_b,self.term_a)
-        return (params == other) or (params_inv == other)
-
     def __hash__(self):
         return hash(self.type+str(hash(self.term_a))+str(hash(self.term_b)))
 
     def __str__(self):
         return "("+str(self.term_a)+" OR "+str(self.term_b)+")"
+
+    def __repr__(self):
+        return str(self)
 
 class Not(Axiom):
     '''
@@ -67,9 +66,6 @@ class Not(Axiom):
         super().__init__("NOT")
         self.term=term
         logger.debug(f"Initialised axiom Not({self.term})")
-
-    def __eq__(self,other):
-        return (self.type,self.term)==other
 
     def __hash__(self):
         return hash(self.type+str(hash(self.term)))
@@ -86,9 +82,6 @@ class Subsumption(Axiom):
         super().__init__("SUBSUMPTION")
         self.axiom1=axiom1
         self.axiom2=axiom2
-
-    def __eq__(self,other):
-        return (self.type,self.axiom)==other
 
     def __hash__(self):
         return hash(self.type+str(hash(self.axiom)))
@@ -107,9 +100,6 @@ class ClassAssertion(Axiom):
         self.instance=instance
         logger.debug(f"Initialised axiom ASSERT {self.instance} is a {self.definitions}")
 
-    def __eq__(self,other):
-        return (self.type,self.definitions,self.instance)==other
-
     def __hash__(self):
         return hash(self.type+str(hash(self.definitions))+str(hash(self.instance)))
 
@@ -127,9 +117,6 @@ class RoleAssertion(Axiom):
         self.instance1=instance1
         self.instance2=instance2
         logger.debug(f"Initialised axiom ASSERT {self.instance1} {self.role} {self.instance2}")
-
-    def __eq__(self,other):
-        return (self.type,self.role,self.instance1,self.instance2)==other
 
     def __hash__(self):
         return hash(self.type+str(hash(self.role))+str(hash(self.instance1))+str(hash(self.instance2)))

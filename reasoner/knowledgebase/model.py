@@ -2,9 +2,8 @@ import logging
 
 logger=logging.getLogger(__name__)
 
-from .graph import Graph
 from ..reasoning.nnf import NNF
-from ..reasoning.tableau import search_model
+from ..reasoning.tableau import get_models
 
 from copy import deepcopy
 
@@ -14,7 +13,7 @@ class Model(object):
     '''
 
     def __init__(self):
-        self.models=[Graph()]
+        self.models=[{}]
         self.axiom_split_methods={"C_ASSERT":self.__split_class_assert,
                                 "R_ASSERT":self.__split_role_assert}
 
@@ -34,8 +33,7 @@ class Model(object):
         '''
         models=[]
         for model in self.models:
-            struct=search_model((deepcopy(model),[axiom],[],individual))
-            models+=struct[2]
+            models+=get_models(model,axiom,individual)
         return models
 
     def __process_graph(self,axiom,node=None):
@@ -74,3 +72,6 @@ class Model(object):
         if axiom.type=="ABOX":
             axiom=axiom.axiom
             self.__consume_abox_axiom(axiom)
+
+    def debug_print(self):
+        print(self.models)
