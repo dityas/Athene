@@ -53,6 +53,9 @@ class Or(Axiom):
     def __str__(self):
         return "("+str(self.term_a)+" OR "+str(self.term_b)+")"
 
+    def __repr__(self):
+        return str(self)
+
 class Not(Axiom):
     '''
         Class for defining Not axioms.

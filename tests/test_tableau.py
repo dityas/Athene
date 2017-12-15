@@ -27,7 +27,12 @@ class TestTableau(unittest.TestCase):
         self.assertTrue(is_model_consistent(models))
 
     def test_complex_and_or(self):
-        axiom=Or(And(Or(Not(Concept("Machine")),Concept("Machine")),Concept("Machine")),And(Or(Not(Concept("Man")),Concept("Man")),Concept("Man")))
+        axiom=Or(And(Concept("Man"),Not(Concept("Man"))),And(Concept("Machine"),Or(Not(Concept("Machine")),Concept("Machine"))))
+        models=get_models({},axiom,"Aditya")
+        self.assertTrue(is_model_consistent(models))
+
+    def test_simple_some(self):
+        axiom=Some("hasParent",And(Concept("Man"),Concept("Human")))
         models=get_models({},axiom,"Aditya")
         self.assertTrue(is_model_consistent(models))
 

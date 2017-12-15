@@ -4,9 +4,11 @@ logger=logging.getLogger(__name__)
 
 from .nnf import NNF
 from ..knowledgebase.axioms import *
-from ..knowledgebase.graph import NodeSet
+from ..knowledgebase.graph import NodeSet,NodeNameGenerator
 
 from copy import deepcopy
+
+namer=NodeNameGenerator()
 
 def update_and_check(label,label_set,consistency):
     if NNF(Not(label)) in label_set:
@@ -31,31 +33,56 @@ def run_expansion_loop(graph,node,models=None):
     '''
     if models==None:
         models=[]
-    axioms,expanded,consistent=graph[node]
+    axioms,expanded,consistent,edges=graph[node]
     while len(axioms["AND"]):
         axiom=axioms["AND"].pop()
         axiom1=axiom.term_a
         axiom2=axiom.term_b
         axioms,expanded,consistent=update_axioms(axiom1,axioms,expanded,consistent)
         axioms,expanded,consistent=update_axioms(axiom2,axioms,expanded,consistent)
-        graph[node]=(axioms,expanded,consistent)
+        graph[node]=(axioms,expanded,consistent,edges)
 
     while len(axioms["OR"]):
         axiom=axioms["OR"].pop()
         axiom1=axiom.term_a
         axiom2=axiom.term_b
-        graph_copy=deepcopy(graph)
-        graph_copy[node]=update_axioms(axiom1,deepcopy(axioms),deepcopy(expanded),consistent)
+        graph_copy_a=deepcopy(graph)
+        axioms_a,expanded_a,consistent_a,edges_a=graph_copy_a[node]
+        graph_copy_b=deepcopy(graph)
+        axioms_b,expanded_b,consistent_b,edges_b=graph_copy_b[node]
+        (axioms_a,expanded_a,consistent_a)=update_axioms(axiom1,axioms_a,expanded_a,consistent_a)
+        graph_copy_a[node]=(axioms_a,expanded_a,consistent_a,edges_a)
         models_a_copy=deepcopy(models)
         models_b_copy=deepcopy(models)
-        models_a=run_expansion_loop(graph_copy,node,models_a_copy)
+        models_a=run_expansion_loop(graph_copy_a,node,models_a_copy)
         if is_model_consistent(models_a):
             models+=models_a
-        graph[node]=update_axioms(axiom2,axioms,expanded,consistent)
-        models_b=run_expansion_loop(graph,node,models_b_copy)
+        axioms_b,expanded_b,consistent_b=update_axioms(axiom2,axioms_b,expanded_b,consistent_b)
+        graph_copy_b[node]=(axioms_b,expanded_b,consistent_b,edges_b)
+        models_b=run_expansion_loop(graph_copy_b,node,models_b_copy)
         if is_model_consistent(models_b):
             models+=models_b
         return models
+
+    while len(axioms["SOME"]):
+        axiom=axioms["SOME"].pop()
+        name=axiom.name
+        axiom1=axiom.concept
+        children=edges.setdefault(name)
+        if children==None:
+            node_name=namer.get_name()
+            edges[name]=set({node_name})
+            graph=prepare_graph(graph,node_name)
+            axioms,expanded,consistent=update_axioms(axiom1,graph[node_name][0],graph[node_name][1],graph[node_name][2])
+            graph[node_name]=(axioms,expanded,consistent,graph[node_name][3])
+            return run_expansion_loop(graph,node_name,models)
+
+        else:
+            for child in children:
+                axioms,expanded,consistent=update_axioms(axiom1,graph[child][0],graph[child][1],graph[child][2])
+                graph[child]=(axioms,expanded,consistent,graph[child][3])
+                models+=run_expansion_loop(graph,child,models)
+            return models
 
     if (len(axioms["AND"])==0) and (len(axioms["OR"])==0) and (len(axioms["SOME"])==0) and (len(axioms["ALL"])==0):
         if is_graph_consistent(graph):
@@ -71,7 +98,7 @@ def prepare_graph(graph,individual):
     '''
     node=graph.setdefault(individual)
     if node == None:
-        graph[individual]=(create_axioms_struct(),set(),True)
+        graph[individual]=(create_axioms_struct(),set(),True,{})
     return graph
 
 def is_graph_consistent(graph):
