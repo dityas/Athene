@@ -75,13 +75,25 @@ def run_expansion_loop(graph,node,models=None):
             graph=prepare_graph(graph,node_name)
             axioms,expanded,consistent=update_axioms(axiom1,graph[node_name][0],graph[node_name][1],graph[node_name][2])
             graph[node_name]=(axioms,expanded,consistent,graph[node_name][3])
-            return run_expansion_loop(graph,node_name,models)
+            return run_expansion_loop(graph,node_name,deepcopy(models))
 
         else:
             for child in children:
                 axioms,expanded,consistent=update_axioms(axiom1,graph[child][0],graph[child][1],graph[child][2])
                 graph[child]=(axioms,expanded,consistent,graph[child][3])
-                models+=run_expansion_loop(graph,child,models)
+                models+=run_expansion_loop(graph,child,deepcopy(models))
+            return models
+
+    while len(axioms["ALL"]):
+        axiom=axioms["ALL"].pop()
+        name=axiom.name
+        axiom1=axiom.concept
+        children=edges.setdefault(name)
+        if children != None:
+            for child in children:
+                axioms,expanded,consistent=update_axioms(axiom1,graph[child][0],graph[child][1],graph[child][2])
+                graph[child]=(axioms,expanded,consistent,graph[child][3])
+                models+=run_expansion_loop(graph,child,deepcopy(models))
             return models
 
     if (len(axioms["AND"])==0) and (len(axioms["OR"])==0) and (len(axioms["SOME"])==0) and (len(axioms["ALL"])==0):
