@@ -33,6 +33,7 @@ def run_expansion_loop(graph,node,models=None):
     '''
     if models==None:
         models=[]
+    #print(f"\r\nResolving {graph[node]} for {node}\r\n")
     axioms,expanded,consistent,edges=graph[node]
     while len(axioms["AND"]):
         axiom=axioms["AND"].pop()
@@ -123,10 +124,34 @@ def is_graph_consistent(graph):
 def is_model_consistent(models):
     return len(list(filter(is_graph_consistent,models)))!=0
 
+def prime_graph(graph,axiom,node):
+    axioms=graph[node][0]
+    expanded=graph[node][1]
+    if axiom.type not in axioms.keys():
+        expanded.add(axiom)
+    else:
+        axioms[axiom.type].add(axiom)
+    return graph,axiom
+
+def tree_search(models,node_list,node_index):
+    if node_index==len(node_list):
+        return models
+    _models=[]
+    for model in models:
+        _models+=run_expansion_loop(model,node_list[node_index])
+    return tree_search(_models,node_list,node_index+1)
+
 def get_models(graph,axiom,individual):
-    graph=prepare_graph(graph,individual)
-    axioms=graph[individual][0]
-    axioms[axiom.type].add(axiom)
-    models=run_expansion_loop(graph,individual)
+    if individual=="#ALL":
+        if len(graph)==0:
+            graph=prepare_graph(graph,namer.get_name())
+        for node in graph.keys():
+            graph,axiom=prime_graph(graph,axiom,node)
+        models=tree_search([graph],list(graph.keys()),0)
+    else:
+        graph=prepare_graph(graph,individual)
+        graph,axiom=prime_graph(graph,axiom,individual)
+        models=run_expansion_loop(graph,individual)
+
     return models
 

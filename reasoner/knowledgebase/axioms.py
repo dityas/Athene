@@ -84,7 +84,7 @@ class Subsumption(Axiom):
         self.axiom2=axiom2
 
     def __hash__(self):
-        return hash(self.type+str(hash(self.axiom)))
+        return hash(self.type+str(hash(self.axiom1))+str(hash(self.axiom2)))
 
     def __repr__(self):
         return f"ALL {self.axiom1} ARE {self.axiom2}"

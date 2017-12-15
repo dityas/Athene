@@ -6,6 +6,7 @@ from ..reasoning.nnf import NNF
 from ..reasoning.tableau import get_models
 
 from copy import deepcopy
+import pprint
 
 class Model(object):
     '''
@@ -14,6 +15,7 @@ class Model(object):
 
     def __init__(self):
         self.models=[{}]
+        self.pp=pprint.PrettyPrinter(indent=2)
         self.axiom_split_methods={"C_ASSERT":self.__split_class_assert,
                                 "R_ASSERT":self.__split_role_assert}
 
@@ -50,6 +52,13 @@ class Model(object):
         axiom,node=self.axiom_split_methods[axiom.type](axiom)
         self.__process_graph(self.__get_nnf(axiom),node)
 
+    def __consume_tbox_axiom(self,axiom):
+        '''
+            Permanently adds TBOX axiom to the graph.
+        '''
+        logger.debug(f"Applying TBOX axiom {axiom}")
+        self.__process_graph(self.__get_nnf(axiom),"#ALL")
+
     def is_consistent(self):
         return len(self.models)!=0
 
@@ -73,5 +82,9 @@ class Model(object):
             axiom=axiom.axiom
             self.__consume_abox_axiom(axiom)
 
+        elif axiom.type=="TBOX":
+            axiom=axiom.axiom
+            self.__consume_tbox_axiom(axiom)
+
     def debug_print(self):
-        print(self.models)
+        self.pp.pprint(self.models)
