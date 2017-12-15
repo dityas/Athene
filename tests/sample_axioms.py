@@ -2,7 +2,7 @@ import sys
 
 sys.path.append("/home/adityas/Projects/ALC-reasoner/")
 
-from reasoner.knowledgebase.axioms import And,Or,Not,ClassAssertion,ABoxAxiom,RoleAssertion
+from reasoner.knowledgebase.axioms import And,Or,Not,ClassAssertion,ABoxAxiom,RoleAssertion,TBoxAxiom,Subsumption
 from reasoner.common.constructors import Concept,All,Some,Instance
 
 simple_or=Or(Concept("Man"),Concept("Machine"))
@@ -32,5 +32,7 @@ ABoxAxiom(ClassAssertion(Concept("Man"),Instance("Aditya"))),
 ABoxAxiom(ClassAssertion(And(Concept("Machine"),Not(Concept("Man"))),Instance("HAL"))),
 ABoxAxiom(ClassAssertion(Some("hasComputer",Concept("Laptop")),Instance("Aditya"))),
 ABoxAxiom(ClassAssertion(All("hasComputer",Not(Concept("Man"))),Instance("Aditya"))),
-ABoxAxiom(RoleAssertion("hasComputer",Instance("Aditya"),Instance("Icarus")))
+TBoxAxiom(Subsumption(Concept("Man"),Concept("Biological")))
 ]
+
+

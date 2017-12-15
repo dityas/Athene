@@ -6,6 +6,7 @@ from .graph import NodeSet
 from .model import Model
 
 from copy import deepcopy
+import pprint
 
 class Box(NodeSet):
     '''
@@ -61,6 +62,7 @@ class KnowledgeBase(object):
         self.abox=ABox()
         self.tbox=TBox()
         self.model=Model()
+        self.pp=pprint.PrettyPrinter(indent=2)
         logger.debug(f"Knowledge base initialised.")
 
     def __axiom_adder(self,axiom):
@@ -76,7 +78,7 @@ class KnowledgeBase(object):
         '''
             Initialises self.axioms as a list of all axioms in the KB.
         '''
-        self.axioms=self.tbox.get_axioms()+self.abox.get_axioms()
+        self.axioms=self.abox.get_axioms()+self.tbox.get_axioms()
 
     def add_axioms(self,axiom_list):
         for axiom in axiom_list:
@@ -87,15 +89,12 @@ class KnowledgeBase(object):
             Loads axioms into KB from python lists.
         '''
         self.add_axioms(axioms)
-        self.run_model()
 
-    def run_model(self):
+    def contains(self,axiom):
         '''
-            Create a model for the current axioms in the KB.
+            returns whether the KB contains the given axiom.
         '''
-        self.init_axioms_list()
-        for axiom in self.axioms:
-            self.model.add_axiom(axiom)
+        return self.abox.contains(axiom) or self.tbox.contains(axiom)
 
     def is_consistent(self):
         return self.model.is_consistent()
@@ -103,8 +102,11 @@ class KnowledgeBase(object):
     def is_satisfiable(self,axiom):
         return self.model.is_satisfiable(axiom)
 
-    def contains(self,axiom):
-        '''
-            returns whether the KB contains the given axiom.
-        '''
-        return self.abox.contains(axiom) or self.tbox.contains(axiom)
+    def run_sat(self):
+        self.init_axioms_list()
+        for axiom in self.axioms:
+            self.model.add_axiom(axiom)
+
+    def print_kb(self):
+        self.init_axioms_list()
+        self.pp.pprint(self.axioms)
